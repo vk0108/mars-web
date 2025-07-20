@@ -1,4 +1,4 @@
-### Mars Explorer 
+# Mars Explorer 
 
 A modern web application for exploring Mars weather data and planetary information, built for hackathon submission.
 
