@@ -13,7 +13,7 @@ A modern web application for exploring Mars weather data and planetary informati
 
 ## ️ Tech Stack
 
-- **Frontend**: React.js, JavaScript
+- **Frontend**: React.js, JavaScript, HTML5
 - **UI/UX**: Custom CSS, Lucide React icons
 - **Charts**: Recharts for data visualizations
 - **Styling**: CSS3 with Mars-themed gradients
