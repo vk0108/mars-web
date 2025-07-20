@@ -1,163 +1,60 @@
 # Mars Explorer 
 
-A comprehensive web application for exploring Mars weather data, planetary comparisons, and fascinating facts about the Red Planet. Built with modern web technologies to provide an immersive and educational experience about Mars exploration.
+A modern web application for exploring Mars weather data and planetary information, built for hackathon submission.
 
 ## Features
 
-### Interactive Homepage
-
-- Stunning Mars-themed design with gradient effects
-- Interactive fact cards with detailed modal information
-- Responsive layout optimized for all devices
-- Smooth animations and hover effects
-
-
-### Weather Dashboard
-
-- Real-time Mars weather simulation
-- Temperature, wind, pressure, and atmospheric data
-- Solar radiation and UV index monitoring
-- Dust storm alerts and atmospheric conditions
-- Sol (Martian day) tracking system
-
-
-### Weather Charts
-
-- Interactive data visualizations using Recharts
-- Historical weather pattern analysis
-- Temperature and pressure trend graphs
-- Comparative weather data displays
-
-
-### Mars vs Earth Comparison
-
-- Side-by-side planetary comparisons
-- Interactive bar charts showing key differences
-- Temperature, pressure, gravity, and radiation data
-- Detailed explanations of planetary conditions
-
-
-### Mars Day Explorer
-
-- Detailed Martian day (Sol) information
-- Daily weather pattern analysis
-- Interactive timeline features
-
-
-### About Mars Weather
-
-- Comprehensive information about Mars missions
-- NASA mission data and achievements
-- Mars weather terminology explained
-- Scientific facts and exploration history
+- **Interactive Mars Homepage** - Immersive landing page with Mars facts
+- **Weather Dashboard** - Real-time Mars weather simulation
+- **Data Visualizations** - Interactive charts comparing Mars vs Earth
+- **Educational Content** - NASA mission data and Mars exploration info
+- **Responsive Design** - Works on all devices
 
 
 ## ️ Tech Stack
 
-### Frontend Technologies
-
-- **React.js** - Component-based UI framework
-- **Next.js** - React framework with App Router
-- **TypeScript** - Type-safe JavaScript
-- **HTML5 & CSS3** - Core web technologies
-- **JavaScript (ES6+)** - Modern JavaScript features
+- **Frontend**: React.js, Next.js, TypeScript
+- **UI/UX**: shadcn/ui, Tailwind CSS, Lucide React
+- **Charts**: Recharts for data visualization
+- **Styling**: CSS3 with Mars-themed gradients
 
 
-### Data Visualization
+## Quick Start
 
-- **Recharts** - React-based charting library
-- **Custom Charts** - Interactive data visualizations
+```shellscript
+# Clone and install
+git clone https://github.com/yourusername/mars-explorer.git
+cd mars-explorer
+npm install
 
+# Run development server
+npm run dev
+```
 
-### UI/UX Libraries
+Open [http://localhost:3000](http://localhost:3000) to view the app.
 
-- **shadcn/ui** - Modern React component library
-- **Tailwind CSS** - Utility-first CSS framework
-- **Lucide React** - Icon library
+## Pages Overview
 
+### **Homepage**
 
-### Fonts & Typography
+Interactive landing page featuring Mars imagery and clickable fact cards covering Olympus Mons, Valles Marineris, polar ice caps, dust storms, twin moons, and ancient oceans. Each card opens detailed modal information.
 
-- **Google Fonts** - SUSE font family
-- **Custom CSS** - Gradient text effects and space-themed styling
+### **Dashboard**
 
+Real-time Mars weather monitoring interface displaying temperature, wind speed/direction, atmospheric pressure, solar radiation, UV index, and dust storm alerts with Sol (Martian day) tracking.
 
-### Architecture
+### **Weather Charts**
 
-- **Component-Based Architecture** - Modular React components
-- **Responsive Design** - Mobile-first approach
-- **Client-Side Routing** - SPA with dynamic navigation
-- **Hybrid Architecture** - React SPA + static HTML pages
+Data visualization page with interactive charts showing temperature trends, pressure variations, wind patterns, and seasonal changes using Recharts library.
 
+### **Compare with Earth**
 
-## Getting Started
+Side-by-side planetary comparison featuring temperature, atmospheric pressure, gravity, and radiation levels with detailed explanations of the differences and their implications.
 
-### Prerequisites
+### **About Mars Weather**
 
-- Node.js (v14 or higher)
-- npm or yarn package manager
+Educational content covering NASA missions (InSight, Curiosity, Perseverance), Mars weather terminology, fascinating facts, and the importance of Mars weather research for future exploration.
 
-## Key Components
+## Live Demo
 
-### Navigation System
-
-- **Hybrid Navigation**: Seamless switching between React SPA and static HTML
-- **Responsive Design**: Mobile-friendly navigation with collapsible menu
-- **Active State Indicators**: Visual feedback for current page
-
-
-### Weather Dashboard
-
-- **Real-time Simulation**: Mock Mars weather data with realistic variations
-- **Interactive Cards**: Hover effects and detailed information displays
-- **Status Indicators**: Visual alerts for dust storms and atmospheric conditions
-
-
-### Data Visualization
-
-- **Recharts Integration**: Professional charts and graphs
-- **Custom Styling**: Mars-themed color schemes and animations
-- **Responsive Charts**: Adaptive sizing for all screen sizes
-
-
-### Educational Content
-
-- **Modal System**: Detailed information overlays
-- **Rich Content**: HTML-formatted educational material
-- **Interactive Elements**: Clickable fact cards and information panels
-
-
-## Design Features
-
-### Visual Design
-
-- **Mars Color Palette**: Authentic reds, oranges, and earth tones
-- **Gradient Effects**: Modern CSS gradients for visual appeal
-- **Space Theme**: Dark backgrounds with stellar accents
-- **Typography**: SUSE font family for modern, clean text
-
-
-### User Experience
-
-- **Smooth Animations**: CSS transitions and hover effects
-- **Loading States**: Professional loading screens and indicators
-- **Responsive Layout**: Optimized for desktop, tablet, and mobile
-- **Accessibility**: Semantic HTML and ARIA labels
-
-
-## Browser Support
-
-- Chrome (recommended)
-- Firefox
-- Safari
-- Edge
-- Mobile browsers (iOS Safari, Chrome Mobile)
-
-
-## Responsive Design
-
-The application is fully responsive and optimized for:
-
-- **Desktop**: Full-featured experience with side-by-side layouts
-- **Tablet**: Adapted grid layouts and touch-friendly interactions
-- **Mobile**: Single-column layouts with optimized navigation
+[View Live Demo](https://mars-explorer.vercel.app)
