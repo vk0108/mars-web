@@ -1,0 +1,1071 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mars Explorer - The Red Planet</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=SUSE:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'SUSE', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+            background: #0f172a;
+            color: white;
+            overflow-x: hidden;
+            min-height: 100vh;
+        }
+
+        /* Navigation Styles */
+        .nav {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 1rem 1.5rem;
+            border-bottom: 1px solid rgba(71, 85, 105, 0.3);
+            background: rgba(15, 23, 42, 0.95);
+            backdrop-filter: blur(10px);
+            position: relative;
+            z-index: 100;
+        }
+
+        .nav-left {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .nav-icon {
+            width: 24px;
+            height: 24px;
+            color: white;
+        }
+
+        .nav-title {
+            font-size: 1.125rem;
+            font-weight: 500;
+            color: white;
+            cursor: pointer;
+        }
+
+        .nav-center {
+            display: flex;
+            align-items: center;
+            gap: 2rem;
+        }
+
+        .nav-link {
+            color: #d1d5db;
+            text-decoration: none;
+            font-size: 1rem; /* Increased from 0.875rem */
+            font-weight: 500; /* Added font weight */
+            transition: color 0.2s;
+            cursor: pointer;
+            padding: 0.5rem 0; /* Added padding for underline space */
+            position: relative; /* For underline positioning */
+        }
+
+        .nav-link:hover {
+            color: white;
+        }
+
+        .nav-link.active {
+            color: #ff6b35; /* Changed from blue to Mars orange */
+            font-weight: 600;
+            text-decoration: underline; /* Added underline */
+            text-decoration-color: #ff6b35; /* Mars orange underline */
+            text-underline-offset: 4px; /* Space between text and underline */
+        }
+
+        .nav-right {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .globe-icon {
+            width: 20px;
+            height: 20px;
+            color: #9ca3af;
+        }
+
+        .avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background-color: #374151;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.875rem;
+            color: white;
+        }
+
+        /* Mobile Navigation */
+        @media (max-width: 768px) {
+            .nav-center {
+                display: none;
+            }
+        }
+
+        /* Mars Homepage Styles */
+        .mars-homepage {
+            position: relative;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+        }
+
+        .mars-background {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+        }
+
+        .content-overlay {
+            position: relative;
+            z-index: 10;
+            background: linear-gradient(135deg, rgba(0, 0, 0, 0.6) 0%, rgba(15, 8, 5, 0.7) 50%, rgba(0, 0, 0, 0.6) 100%);
+            backdrop-filter: blur(0.5px);
+            min-height: calc(100vh - 80px);
+        }
+
+        .mars-title-section {
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+
+        .planet-title {
+            font-size: 3.5rem;
+            font-weight: bold;
+            color: white;
+            margin-bottom: 1rem;
+            background: linear-gradient(45deg, #fff, #ff6b35, #cd5c5c);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-shadow: 0 0 30px rgba(255, 107, 53, 0.5);
+        }
+
+        @media (max-width: 768px) {
+            .planet-title {
+                font-size: 2.5rem;
+            }
+        }
+
+        .main-content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: calc(100vh - 80px);
+            padding: 2rem 1.5rem;
+            text-align: center;
+        }
+
+        .hero-image-container {
+            position: relative;
+            margin-bottom: 2rem;
+            border-radius: 1rem;
+            overflow: hidden;
+            max-width: 1200px;
+            width: 100%;
+        }
+
+        .hero-image {
+            width: 100%;
+            height: 400px;
+            object-fit: cover;
+        }
+
+        .image-overlay {
+            position: absolute;
+            inset: 0;
+            background-color: rgba(0, 0, 0, 0.3);
+        }
+
+        .hero-text-overlay {
+            position: absolute;
+            bottom: 2rem;
+            left: 2rem;
+        }
+
+        .hero-title {
+            font-size: 3rem;
+            font-weight: bold;
+            color: white;
+            line-height: 1.1;
+            margin-bottom: 1rem;
+        }
+
+        .content {
+            max-width: 64rem;
+            width: 100%;
+        }
+
+        .description {
+            color: #d1d5db;
+            line-height: 1.6;
+            margin-bottom: 2rem;
+            font-size: 1.25rem; /* Increased from 1rem to 1.25rem */
+            max-width: 900px; /* Added max-width for better readability */
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .btn-primary {
+            background-color: #2563eb;
+            color: white;
+            padding: 0.625rem 1.5rem;
+            border: none;
+            border-radius: 0.375rem;
+            font-size: 0.875rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background-color 0.2s;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .btn-primary:hover {
+            background-color: #1d4ed8;
+        }
+
+        .btn-secondary {
+            background-color: transparent;
+            color: #d1d5db;
+            padding: 0.625rem 1.5rem;
+            border: 1px solid #6b7280;
+            border-radius: 0.375rem;
+            font-size: 0.875rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .btn-secondary:hover {
+            background-color: #374151;
+            border-color: #9ca3af;
+        }
+
+        /* Fun Facts Grid */
+        .facts-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+            width: 100%;
+            max-width: 1200px;
+            margin: 3rem 0;
+        }
+
+        .fact-card {
+            background: rgba(0, 0, 0, 0.8);
+            border: 1px solid #333;
+            border-radius: 10px;
+            padding: 25px;
+            text-align: center;
+            transition: all 0.4s ease;
+            position: relative;
+            overflow: hidden;
+            backdrop-filter: blur(10px);
+            cursor: pointer;
+        }
+
+        .fact-card::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 107, 53, 0.1), transparent);
+            transition: left 0.6s;
+        }
+
+        .fact-card:hover::before {
+            left: 100%;
+        }
+
+        .fact-card:hover {
+            border-color: #ff6b35;
+            transform: translateY(-10px) scale(1.02);
+            box-shadow: 0 15px 40px rgba(255, 107, 53, 0.4);
+        }
+
+        .fact-icon {
+            font-size: 32px;
+            margin-bottom: 15px;
+            color: #ff6b35;
+        }
+
+        .fact-title {
+            font-size: 16px;
+            color: #ff6b35;
+            font-weight: 600;
+            margin-bottom: 12px;
+            letter-spacing: 1px;
+        }
+
+        .fact-description {
+            font-size: 13px;
+            color: #ccc;
+            line-height: 1.6;
+        }
+
+        .click-hint {
+            font-size: 11px;
+            color: #ff6b35;
+            margin-top: 10px;
+            opacity: 0.7;
+            font-style: italic;
+        }
+
+        /* Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.9);
+            backdrop-filter: blur(5px);
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal.show {
+            display: flex;
+        }
+
+        .modal-content {
+            background: linear-gradient(135deg, rgba(0, 0, 0, 0.95), rgba(20, 10, 10, 0.95));
+            padding: 30px;
+            border: 2px solid #ff6b35;
+            border-radius: 15px;
+            width: 90%;
+            max-width: 600px;
+            max-height: 80vh;
+            overflow-y: auto;
+            position: relative;
+            animation: modalSlideIn 0.3s ease-out;
+        }
+
+        @keyframes modalSlideIn {
+            from {
+                transform: translateY(-50px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        .close {
+            color: #ff6b35;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+            line-height: 1;
+        }
+
+        .close:hover {
+            color: #fff;
+        }
+
+        .modal-title {
+            color: #ff6b35;
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .modal-text {
+            color: #ccc;
+            line-height: 1.8;
+            font-size: 20px; /* Increased from 14px */
+        }
+
+        .modal-text h3 {
+            color: #ff6b35;
+            margin: 20px 0 10px 0;
+            font-size: 22px; /* Increased from 16px */
+        }
+
+        .modal-text ul {
+            margin: 10px 0;
+            padding-left: 20px;
+        }
+
+        .modal-text li {
+            margin: 10px 0; /* Increased from 5px 0 */
+            font-size: 15px; /* Added explicit font size */
+        }
+
+        /* Loading Animation */
+        .loading-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #0f172a;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 2000;
+            opacity: 1;
+            transition: opacity 1s ease-out;
+        }
+
+        .loading-screen.hidden {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .loader {
+            width: 60px;
+            height: 60px;
+            border: 4px solid #333;
+            border-top-color: #ff6b35;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .hero-title {
+                font-size: 2rem;
+            }
+
+            .hero-text-overlay {
+                left: 1rem;
+                bottom: 1rem;
+            }
+
+            .main-content {
+                padding: 1rem;
+            }
+
+            .facts-grid {
+                grid-template-columns: 1fr;
+                gap: 1rem;
+            }
+
+            .buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .btn-primary,
+            .btn-secondary {
+                width: 100%;
+                max-width: 300px;
+            }
+
+            .modal-content {
+                margin: 10% auto;
+                width: 95%;
+                padding: 20px;
+            }
+
+            .description {
+                font-size: 1.125rem; /* Increased from 1rem to 1.125rem for mobile */
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation Header -->
+    <nav class="nav">
+        <div class="nav-left">
+            <svg class="nav-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"/>
+            </svg>
+            <span class="nav-title">Mars Explorer</span>
+        </div>
+
+        <div class="nav-center">
+            <a href="#" class="nav-link" onclick="navigateTo('dashboard')">Dashboard</a>
+            <a href="#" class="nav-link" onclick="navigateTo('weather-charts')">Weather Charts</a>
+            <a href="#" class="nav-link" onclick="navigateTo('mars-day')">Mars Day Explorer</a>
+            <a href="#" class="nav-link" onclick="navigateTo('compare-earth')">Compare with Earth</a>
+            <a href="#" class="nav-link" onclick="navigateTo('about-mars-weather')">About Mars Weather</a>
+        </div>
+    </nav>
+
+    <!-- Loading Screen -->
+    <div class="loading-screen" id="loadingScreen">
+        <div class="loader"></div>
+    </div>
+
+    <div class="mars-homepage">
+        <!-- 3D Mars Background -->
+        <canvas id="marsBackground" class="mars-background"></canvas>
+
+        <div class="content-overlay">
+            <!-- Main Content -->
+            <main class="main-content">
+                <!-- Title Section - Move this to the top -->
+                <div class="mars-title-section">
+                    <h1 class="planet-title">Mars - The Red Planet</h1>
+                </div>
+
+                <!-- Mars Image Banner -->
+               
+
+                <!-- Content Below Image -->
+                <div class="content">
+                    <p class="description">
+                        Welcome to the Mars Explorer website, your gateway to the latest information about the Red Planet. Explore
+                        real-time weather updates, detailed charts, and interactive tools to compare Mars's conditions with Earth's.
+                        Dive into the Martian environment and discover the wonders of this fascinating world.
+                    </p>
+
+                    <!-- Interactive Facts Grid -->
+                    <div class="facts-grid">
+                        <div class="fact-card" onclick="openModal('olympus-mons')">
+                            <div class="fact-icon">🌋</div>
+                            <div class="fact-title">OLYMPUS MONS</div>
+                            <div class="fact-description">
+                                Largest volcano in the solar system - 21.9 km tall, nearly 3 times Mount Everest's height
+                            </div>
+                            <div class="click-hint">Click for more details</div>
+                        </div>
+                        <div class="fact-card" onclick="openModal('valles-marineris')">
+                            <div class="fact-icon">🏔️</div>
+                            <div class="fact-title">VALLES MARINERIS</div>
+                            <div class="fact-description">
+                                Grand canyon stretching 4,000 km - wide enough to span the entire United States
+                            </div>
+                            <div class="click-hint">Click for more details</div>
+                        </div>
+                        <div class="fact-card" onclick="openModal('polar-ice-caps')">
+                            <div class="fact-icon">❄️</div>
+                            <div class="fact-title">POLAR ICE CAPS</div>
+                            <div class="fact-description">
+                                Permanent ice caps containing both water ice and frozen CO₂, expanding and contracting seasonally
+                            </div>
+                            <div class="click-hint">Click for more details</div>
+                        </div>
+                        <div class="fact-card" onclick="openModal('dust-storms')">
+                            <div class="fact-icon">🌪️</div>
+                            <div class="fact-title">DUST STORMS</div>
+                            <div class="fact-description">
+                                Planet-wide storms lasting months with 100+ km/h winds that can cover the entire planet
+                            </div>
+                            <div class="click-hint">Click for more details</div>
+                        </div>
+                        <div class="fact-card" onclick="openModal('twin-moons')">
+                            <div class="fact-icon">🌙</div>
+                            <div class="fact-title">TWIN MOONS</div>
+                            <div class="fact-description">
+                                Phobos orbits Mars in just 7.6 hours - faster than Mars rotates. Deimos takes 30.3 hours
+                            </div>
+                            <div class="click-hint">Click for more details</div>
+                        </div>
+                        <div class="fact-card" onclick="openModal('ancient-oceans')">
+                            <div class="fact-icon">💧</div>
+                            <div class="fact-title">ANCIENT OCEANS</div>
+                            <div class="fact-description">
+                                Evidence suggests Mars once had oceans covering 1/3 of its surface, deeper than Earth's Arctic Ocean
+                            </div>
+                            <div class="click-hint">Click for more details</div>
+                        </div>
+                    </div>
+
+                    <div class="buttons">
+                        <a href="#" class="btn-primary" onclick="navigateTo('dashboard')">View Dashboard</a>
+                        <a href="#" class="btn-secondary" onclick="navigateTo('weather-charts')">Explore Weather Charts</a>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <!-- Modal for detailed information -->
+    <div id="factModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal()">&times;</span>
+            <div id="modalTitle" class="modal-title"></div>
+            <div id="modalText" class="modal-text"></div>
+        </div>
+    </div>
+
+    <script>
+        // Navigation function
+        function navigateTo(page) {
+            switch(page) {
+                case 'dashboard':
+                    // Navigate back to React app with dashboard page
+                    window.location.href = '/?page=dashboard';
+                    break;
+                case 'weather-charts':
+                    window.location.href = '/?page=weather-charts';
+                    break;
+                case 'mars-day':
+                    window.location.href = '/?page=mars-day';
+                    break;
+                case 'compare-earth':
+                    window.location.href = '/?page=compare-earth';
+                    break;
+                case 'about-mars-weather':
+                    window.location.href = '/?page=about-mars-weather';
+                    break;
+                default:
+                    window.location.href = '/';
+            }
+        }
+
+        // Fact details data
+        const factDetails = {
+            'olympus-mons': {
+                title: 'OLYMPUS MONS - The Solar System\'s Giant',
+                content: `
+                    <h3>🌋 Massive Scale</h3>
+                    <ul>
+                        <li>Height: 21.9 km (13.6 miles) - nearly 3 times taller than Mount Everest</li>
+                        <li>Base diameter: 624 km (374 miles) - roughly the size of Arizona</li>
+                        <li>Volume: 4 million cubic kilometers</li>
+                        <li>Slope: Only 2-5 degrees - so gradual you wouldn't notice climbing it</li>
+                    </ul>
+                    
+                    <h3>🔬 Formation & Geology</h3>
+                    <ul>
+                        <li>Shield volcano formed by repeated lava flows over millions of years</li>
+                        <li>Low gravity allowed it to grow much taller than Earth volcanoes</li>
+                        <li>Caldera at summit is 80 km wide with multiple collapse craters</li>
+                        <li>Estimated to be 115-200 million years old</li>
+                    </ul>
+                `
+            },
+            'valles-marineris': {
+                title: 'VALLES MARINERIS - The Grand Canyon of Mars',
+                content: `
+                    <h3>🏔️ Enormous Dimensions</h3>
+                    <ul>
+                        <li>Length: 4,000 km (2,500 miles) - spans nearly the width of the United States</li>
+                        <li>Width: Up to 200 km (120 miles) in some places</li>
+                        <li>Depth: Up to 7 km (4.3 miles) deep</li>
+                        <li>10 times longer and 5 times deeper than Earth's Grand Canyon</li>
+                    </ul>
+                    
+                    <h3>🌍 Formation Theory</h3>
+                    <ul>
+                        <li>Likely formed by tectonic stretching and cracking of the crust</li>
+                        <li>Enhanced by water and wind erosion over billions of years</li>
+                        <li>Connected to the massive Tharsis volcanic region</li>
+                        <li>Contains evidence of ancient water flow and possibly lakes</li>
+                    </ul>
+                `
+            },
+            'polar-ice-caps': {
+                title: 'POLAR ICE CAPS - Mars\' Frozen Reservoirs',
+                content: `
+                    <h3>❄️ Composition & Structure</h3>
+                    <ul>
+                        <li>North cap: Mostly water ice, 1,000 km diameter, 2 km thick</li>
+                        <li>South cap: Mix of water ice and dry ice (CO₂), smaller but thicker</li>
+                        <li>Layered deposits show climate history over millions of years</li>
+                        <li>Seasonal caps expand and shrink with CO₂ freezing/sublimating</li>
+                    </ul>
+                    
+                    <h3>💧 Water Resources</h3>
+                    <ul>
+                        <li>North cap contains enough water to cover Mars 11 meters deep</li>
+                        <li>Potential source of water for future human missions</li>
+                        <li>Could be processed into drinking water and rocket fuel</li>
+                        <li>Subsurface ice extends far beyond visible caps</li>
+                    </ul>
+                `
+            },
+            'dust-storms': {
+                title: 'DUST STORMS - Mars\' Atmospheric Fury',
+                content: `
+                    <h3>🌪️ Scale & Intensity</h3>
+                    <ul>
+                        <li>Local storms can grow to cover entire planet in weeks</li>
+                        <li>Wind speeds: 100+ km/h (60+ mph)</li>
+                        <li>Can last for months, blocking sunlight completely</li>
+                        <li>Dust particles lifted up to 60 km high in atmosphere</li>
+                    </ul>
+                    
+                    <h3>🛰️ Impact on Missions</h3>
+                    <ul>
+                        <li>2018 storm ended Opportunity rover's 15-year mission</li>
+                        <li>Solar panels get covered, cutting power to spacecraft</li>
+                        <li>Communication with Earth can be disrupted</li>
+                        <li>Future missions must plan for dust storm seasons</li>
+                    </ul>
+                `
+            },
+            'twin-moons': {
+                title: 'PHOBOS & DEIMOS - Mars\' Mysterious Moons',
+                content: `
+                    <h3>🌙 Phobos - The Doomed Moon</h3>
+                    <ul>
+                        <li>Orbital period: 7.6 hours (3 times per Martian day)</li>
+                        <li>Distance: 6,000 km from Mars surface</li>
+                        <li>Size: 22 km diameter, potato-shaped</li>
+                        <li>Spiraling inward 1.8 cm per year - will crash into Mars in 50 million years</li>
+                        <li>Rises in west, sets in east due to fast orbit</li>
+                    </ul>
+                    
+                    <h3>🌙 Deimos - The Distant Moon</h3>
+                    <ul>
+                        <li>Orbital period: 30.3 hours (slightly longer than Mars day)</li>
+                        <li>Distance: 23,500 km from Mars surface</li>
+                        <li>Size: 12 km diameter, also potato-shaped</li>
+                        <li>Appears as a bright star from Mars surface</li>
+                        <li>Slowly moving away from Mars</li>
+                    </ul>
+                `
+            },
+            'ancient-oceans': {
+                title: 'ANCIENT OCEANS - Mars\' Watery Past',
+                content: `
+                    <h3>🌊 Evidence of Ancient Water</h3>
+                    <ul>
+                        <li>Northern lowlands may have held ocean 4 billion years ago</li>
+                        <li>Would have covered 1/3 of planet's surface</li>
+                        <li>Estimated depth: 1.6 km average, up to 4.5 km in places</li>
+                        <li>Contained more water than Earth's Arctic Ocean</li>
+                    </ul>
+                    
+                    <h3>🧬 Implications for Life</h3>
+                    <ul>
+                        <li>Liquid water essential for life as we know it</li>
+                        <li>Stable water bodies could have supported microbial life</li>
+                        <li>Hydrothermal vents may have provided energy sources</li>
+                        <li>Search for biosignatures in ancient lake bed sediments</li>
+                    </ul>
+                `
+            }
+        };
+
+        // Modal functions
+        function openModal(factKey) {
+            const modal = document.getElementById('factModal');
+            const modalTitle = document.getElementById('modalTitle');
+            const modalText = document.getElementById('modalText');
+            
+            const factData = factDetails[factKey];
+            if (factData) {
+                modalTitle.textContent = factData.title;
+                modalText.innerHTML = factData.content;
+                modal.classList.add('show');
+            }
+        }
+
+        function closeModal() {
+            const modal = document.getElementById('factModal');
+            modal.classList.remove('show');
+        }
+
+        // Close modal when clicking outside
+        window.onclick = function(event) {
+            const modal = document.getElementById('factModal');
+            if (event.target === modal) {
+                closeModal();
+            }
+        }
+
+        // 3D Mars Background
+        let scene, camera, renderer, marsGroup, animationId;
+
+        function createAuthenticMarsTexture() {
+            const canvas = document.createElement('canvas');
+            canvas.width = 2048;
+            canvas.height = 2048;
+            const ctx = canvas.getContext('2d');
+
+            const imageData = ctx.createImageData(2048, 2048);
+            const data = imageData.data;
+
+            // Mars color palette
+            const marsColors = {
+                typical: { r: 193, g: 68, b: 14 },
+                dark: { r: 139, g: 69, b: 19 },
+                light: { r: 205, g: 133, b: 63 },
+                ice: { r: 255, g: 248, b: 220 },
+                deep: { r: 101, g: 67, b: 33 },
+                volcanic: { r: 160, g: 82, b: 45 }
+            };
+
+            function smoothNoise(x, y, scale) {
+                const intX = Math.floor(x * scale);
+                const intY = Math.floor(y * scale);
+                const fracX = x * scale - intX;
+                const fracY = y * scale - intY;
+
+                const a = pseudoRandom(intX, intY);
+                const b = pseudoRandom(intX + 1, intY);
+                const c = pseudoRandom(intX, intY + 1);
+                const d = pseudoRandom(intX + 1, intY + 1);
+
+                const i1 = interpolate(a, b, fracX);
+                const i2 = interpolate(c, d, fracX);
+
+                return interpolate(i1, i2, fracY);
+            }
+
+            function pseudoRandom(x, y) {
+                const n = Math.sin(x * 12.9898 + y * 78.233) * 43758.5453;
+                return n - Math.floor(n);
+            }
+
+            function interpolate(a, b, x) {
+                const ft = x * Math.PI;
+                const f = (1 - Math.cos(ft)) * 0.5;
+                return a * (1 - f) + b * f;
+            }
+
+            // Generate Mars surface
+            for (let i = 0; i < data.length; i += 4) {
+                const x = (i / 4) % 2048;
+                const y = Math.floor((i / 4) / 2048);
+
+                const lat = (y / 2048 - 0.5) * Math.PI;
+                const lon = (x / 2048) * 2 * Math.PI;
+
+                let terrain = 0;
+                terrain += smoothNoise(x, y, 0.005) * 0.5;
+                terrain += smoothNoise(x, y, 0.01) * 0.25;
+                terrain += smoothNoise(x, y, 0.02) * 0.125;
+                terrain += smoothNoise(x, y, 0.04) * 0.0625;
+
+                const color = { ...marsColors.typical };
+
+                // Polar ice caps
+                const polarDistance = Math.abs(lat);
+                if (polarDistance > 1.2) {
+                    const iceFactor = Math.pow((polarDistance - 1.2) / 0.37, 2);
+                    color.r = color.r + (marsColors.ice.r - color.r) * iceFactor;
+                    color.g = color.g + (marsColors.ice.g - color.g) * iceFactor;
+                    color.b = color.b + (marsColors.ice.b - color.b) * iceFactor;
+                }
+
+                // Add surface variation
+                const variation = (terrain - 0.5) * 40;
+                color.r = Math.max(50, Math.min(255, color.r + variation));
+                color.g = Math.max(20, Math.min(200, color.g + variation * 0.7));
+                color.b = Math.max(10, Math.min(150, color.b + variation * 0.5));
+
+                data[i] = Math.round(color.r);
+                data[i + 1] = Math.round(color.g);
+                data[i + 2] = Math.round(color.b);
+                data[i + 3] = 255;
+            }
+
+            ctx.putImageData(imageData, 0, 0);
+            return new THREE.CanvasTexture(canvas);
+        }
+
+        function initMarsBackground() {
+            const canvas = document.getElementById('marsBackground');
+            if (!canvas) return;
+
+            scene = new THREE.Scene();
+            camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+            camera.position.set(0, 0, 8);
+
+            renderer = new THREE.WebGLRenderer({
+                canvas: canvas,
+                alpha: true,
+                antialias: true
+            });
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            renderer.setClearColor(0x000000, 0);
+            renderer.shadowMap.enabled = true;
+            renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+
+            // Create Mars group
+            marsGroup = new THREE.Group();
+            scene.add(marsGroup);
+
+            // Create Mars sphere
+            const geometry = new THREE.SphereGeometry(4, 128, 128);
+            const marsTexture = createAuthenticMarsTexture();
+            marsTexture.wrapS = THREE.RepeatWrapping;
+            marsTexture.wrapT = THREE.RepeatWrapping;
+
+            const material = new THREE.MeshLambertMaterial({
+                map: marsTexture,
+                transparent: false
+            });
+
+            const mars = new THREE.Mesh(geometry, material);
+            mars.position.set(-1.5, 0, 0);
+            mars.castShadow = true;
+            mars.receiveShadow = true;
+            marsGroup.add(mars);
+
+            // Atmosphere
+            const atmosphereGeometry = new THREE.SphereGeometry(4.05, 32, 32);
+            const atmosphereMaterial = new THREE.ShaderMaterial({
+                vertexShader: `
+                    varying vec3 vNormal;
+                    void main() {
+                        vNormal = normalize(normalMatrix * normal);
+                        gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+                    }
+                `,
+                fragmentShader: `
+                    varying vec3 vNormal;
+                    void main() {
+                        float intensity = pow(0.95 - dot(vNormal, vec3(0, 0, 1.0)), 4.0);
+                        vec3 glowColor = vec3(1.0, 0.7, 0.4);
+                        float alpha = intensity * 0.15;
+                        gl_FragColor = vec4(glowColor * intensity, alpha);
+                    }
+                `,
+                blending: THREE.AdditiveBlending,
+                side: THREE.BackSide,
+                transparent: true
+            });
+
+            const atmosphere = new THREE.Mesh(atmosphereGeometry, atmosphereMaterial);
+            atmosphere.position.copy(mars.position);
+            marsGroup.add(atmosphere);
+
+            // Lighting
+            const sunLight = new THREE.DirectionalLight(0xffffff, 1.0);
+            sunLight.position.set(10, 5, 5);
+            sunLight.castShadow = true;
+            sunLight.shadow.mapSize.width = 2048;
+            sunLight.shadow.mapSize.height = 2048;
+            scene.add(sunLight);
+
+            const ambientLight = new THREE.AmbientLight(0x222222, 0.1);
+            scene.add(ambientLight);
+
+            // Stars
+            const starsGeometry = new THREE.BufferGeometry();
+            const starsVertices = [];
+            const starsColors = [];
+
+            for (let i = 0; i < 2000; i++) {
+                const x = (Math.random() - 0.5) * 2000;
+                const y = (Math.random() - 0.5) * 2000;
+                const z = (Math.random() - 0.5) * 2000;
+                starsVertices.push(x, y, z);
+
+                const temp = Math.random();
+                const color = new THREE.Color();
+                if (temp < 0.7) {
+                    color.setRGB(1.0, 1.0, 1.0);
+                } else if (temp < 0.9) {
+                    color.setRGB(1.0, 0.9, 0.7);
+                } else {
+                    color.setRGB(1.0, 0.7, 0.5);
+                }
+
+                starsColors.push(color.r, color.g, color.b);
+            }
+
+            starsGeometry.setAttribute('position', new THREE.Float32BufferAttribute(starsVertices, 3));
+            starsGeometry.setAttribute('color', new THREE.Float32BufferAttribute(starsColors, 3));
+
+            const starsMaterial = new THREE.PointsMaterial({
+                size: 1.5,
+                transparent: true,
+                opacity: 0.8,
+                vertexColors: true
+            });
+
+            const stars = new THREE.Points(starsGeometry, starsMaterial);
+            scene.add(stars);
+
+            animate();
+        }
+
+        function animate() {
+            animationId = requestAnimationFrame(animate);
+
+            if (marsGroup) {
+                marsGroup.rotation.y += 0.002;
+            }
+
+            const time = Date.now() * 0.0005;
+            if (camera && marsGroup) {
+                camera.position.x = Math.sin(time) * 0.3;
+                camera.position.y = Math.cos(time * 0.7) * 0.2;
+                camera.lookAt(marsGroup.position);
+            }
+
+            if (renderer && scene) {
+                renderer.render(scene, camera);
+            }
+        }
+
+        function handleResize() {
+            if (renderer && camera) {
+                camera.aspect = window.innerWidth / window.innerHeight;
+                camera.updateProjectionMatrix();
+                renderer.setSize(window.innerWidth, window.innerHeight);
+            }
+        }
+
+        function handleMouseMove(e) {
+            if (marsGroup) {
+                const mouseX = (e.clientX / window.innerWidth - 0.5) * 0.1;
+                const mouseY = (e.clientY / window.innerHeight - 0.5) * 0.1;
+
+                marsGroup.rotation.y += mouseX * 0.002;
+                marsGroup.rotation.x += mouseY * 0.002;
+            }
+        }
+
+        // Initialize everything when page loads
+        window.addEventListener('load', function() {
+            // Hide loading screen
+            setTimeout(() => {
+                const loadingScreen = document.getElementById('loadingScreen');
+                loadingScreen.classList.add('hidden');
+            }, 2500);
+
+            // Initialize 3D Mars
+            initMarsBackground();
+
+            // Add event listeners
+            window.addEventListener('resize', handleResize);
+            document.addEventListener('mousemove', handleMouseMove);
+        });
+
+        // Cleanup on page unload
+        window.addEventListener('beforeunload', function() {
+            if (animationId) {
+                cancelAnimationFrame(animationId);
+            }
+            if (renderer) {
+                renderer.dispose();
+            }
+        });
+    </script>
+</body>
+</html>

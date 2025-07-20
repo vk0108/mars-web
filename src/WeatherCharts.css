@@ -1,0 +1,209 @@
+.weather-charts {
+  min-height: calc(100vh - 80px);
+  padding: 2rem;
+  background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+}
+
+.charts-header {
+  text-align: center;
+  margin-bottom: 3rem;
+}
+
+.charts-title {
+  font-size: 2.5rem;
+  font-weight: bold;
+  color: white;
+  margin-bottom: 0.5rem;
+}
+
+.charts-subtitle {
+  font-size: 1.125rem;
+  color: #94a3b8;
+  margin-bottom: 2rem;
+}
+
+.charts-controls {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+}
+
+.live-toggle {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.5rem;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 0.5rem;
+  color: #94a3b8;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-size: 0.875rem;
+  font-weight: 500;
+}
+
+.live-toggle:hover {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 255, 255, 0.2);
+}
+
+.live-toggle.active {
+  background: rgba(34, 197, 94, 0.1);
+  border-color: #22c55e;
+  color: #22c55e;
+}
+
+.refresh-icon {
+  width: 16px;
+  height: 16px;
+}
+
+.refresh-icon.spinning {
+  animation: spin 2s linear infinite;
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.charts-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
+  gap: 2rem;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.chart-card {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 1rem;
+  padding: 1.5rem;
+  backdrop-filter: blur(10px);
+  transition: all 0.3s ease;
+}
+
+.chart-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+  border-color: rgba(255, 255, 255, 0.2);
+}
+
+.chart-header {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 1.5rem;
+}
+
+.chart-icon {
+  width: 24px;
+  height: 24px;
+}
+
+.chart-title {
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: white;
+}
+
+.chart-container {
+  width: 100%;
+  height: 300px;
+}
+
+/* Icon colors */
+.temperature-icon {
+  color: #ef4444;
+}
+
+.pressure-icon {
+  color: #10b981;
+}
+
+.wind-icon {
+  color: #06b6d4;
+}
+
+.direction-icon {
+  color: #8b5cf6;
+}
+
+/* Custom tooltip */
+.custom-tooltip {
+  background: rgba(0, 0, 0, 0.9);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 0.5rem;
+  padding: 0.75rem;
+  color: white;
+  font-size: 0.875rem;
+}
+
+.tooltip-label {
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+  color: #94a3b8;
+}
+
+/* Charts footer */
+.charts-footer {
+  max-width: 1400px;
+  margin: 3rem auto 0;
+}
+
+.info-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 1.5rem;
+}
+
+.info-card {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 1rem;
+  padding: 1.5rem;
+  text-align: center;
+}
+
+.info-card h4 {
+  color: white;
+  font-size: 1.125rem;
+  margin-bottom: 0.75rem;
+}
+
+.info-card p {
+  color: #94a3b8;
+  line-height: 1.6;
+  font-size: 0.875rem;
+}
+
+/* Responsive design */
+@media (max-width: 1024px) {
+  .charts-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 768px) {
+  .weather-charts {
+    padding: 1rem;
+  }
+  
+  .charts-title {
+    font-size: 2rem;
+  }
+  
+  .chart-card {
+    padding: 1rem;
+  }
+  
+  .chart-container {
+    height: 250px;
+  }
+  
+  .charts-grid {
+    gap: 1rem;
+  }
+}
